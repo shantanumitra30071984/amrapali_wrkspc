@@ -1,0 +1,3 @@
+C\:/amrapali_wrkspc/AmrapaliTreasury/WebContent = AmrapaliTreasury.war
+C\:/amrapali_wrkspc/AmrapaliTreasury/build/weboutput = AmrapaliTreasury.war
+C\:/amrapali_wrkspc/AmrapaliTreasury/build/classes = AmrapaliTreasury.war/WEB-INF/classes

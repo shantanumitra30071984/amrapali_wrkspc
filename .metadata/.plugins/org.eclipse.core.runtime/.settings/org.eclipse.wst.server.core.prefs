@@ -1,0 +1,4 @@
+#Sat May 20 17:48:24 IST 2017
+module-start-timeout=300000
+runtimes=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<runtimes>\r\n  <runtime id\="Oracle WebLogic Server 11gR1 (10.3.6)" location\="C\:/OracleNew/Middleware/wlserver_10.3" name\="Oracle WebLogic Server 11gR1 (10.3.6)" runtime-type-id\="com.bea.weblogic1036" timestamp\="0"/>\r\n</runtimes>\r\n
+eclipse.preferences.version=1

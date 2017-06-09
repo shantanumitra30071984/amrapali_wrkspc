@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="amrapali">
+<insert id="insertUsers" parameterClass="java.util.Map">
+INSERT INTO AMPR_GEN_USERS(USER_ID, USER_NAME,FLAT_NO,BLOCK,FLAT_SQFT)VALUES
+(#userId#,#userName#,#flatNo#,#block#,#sqrFt#)
+</insert>
+<select id="totalcurrentusers" resultClass="java.lang.String">
+select count(*) from AMPR_GEN_USERS 
+</select>
+
+<select id="userDetails" resultClass="com.amrapalicastle.bean.AmrapaliCastleBean">
+select u.flat_no flatNo,u.user_name userName,u.flat_sqft sqrFt from AMPR_GEN_USERS  u where u.BLOCK=#block# order by u.flat_no
+</select>
+
+<select id="currentMonth" resultClass="java.lang.String">
+select to_char(sysdate, 'dd/MM/yyyy') from dual
+</select>
+<insert id="insertUsersPayment" parameterClass="java.util.Map">
+INSERT INTO AMPR_USER_MAINTENANCE_PAYMENT1(BLOCK, FLAT_NO,NAME,FLAT_SIZE,FIN_YEAR,JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC)VALUES
+(#block#,#flatNo#,#userName#,#sqrFt#,#year#,#jan#,#feb#,#mar#,#apr#,#may#,#jun#,#jul#,#aug#,#sep#,#oct#,#nov#,#dec#)
+</insert>
+<select id="userPaymentDetails" resultClass="com.amrapalicastle.bean.AmrapaliCastleBean">
+select u.flat_no flatNo,u.name userName,u.flat_size sqrFt, fin_year year,JAN month0, FEB month1,MAR month2,APR month3,MAY month4,JUN month5,JUL month6, AUG month7,SEP month8,OCT month9,NOV month10,DEC month11 from AMPR_USER_MAINTENANCE_PAYMENT1 u where u.BLOCK=#block# order by u.flat_no
+
+</select>
+</sqlMap>
+

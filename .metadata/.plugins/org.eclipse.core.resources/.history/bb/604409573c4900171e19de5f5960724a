@@ -1,0 +1,89 @@
+package com.amrapalicastle.dao;
+
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import com.amrapalicastle.bean.AmrapaliCastleBean;
+import com.amrapalicastle.ibatis.IBatisClientFactory;
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+public class AmrapaliCastleDao {
+public void parXmlData(AmrapaliCastleBean amrapaliBean){
+	try {
+		SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+		String count=(String)sqlClient.queryForObject("amrapali.totalcurrentusers");
+		int totalUsers=Integer.parseInt(count);
+		System.out.println("TOTAL USERS==="+totalUsers);
+		DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		InputSource is = new InputSource();
+		Map<String,Object>map=new HashMap<String,Object>();
+	    is.setCharacterStream(new StringReader(amrapaliBean.getXmlData()));
+	    Document doc = db.parse(is);
+	    NodeList nodes = doc.getElementsByTagName("User");
+	    for (int i = 0; i < nodes.getLength(); i++) {
+	    	totalUsers++;
+	    	map.put("userId", (totalUsers)+"");
+	    	//map.put("userId", "50");
+	        Element element = (Element) nodes.item(i);
+
+	        NodeList Name = element.getElementsByTagName("UserName");
+	        Element line = (Element) Name.item(0);
+	        map.put("userName", getCharacterDataFromElement(line));
+
+	        NodeList FlatNo = element.getElementsByTagName("FlatNo");
+	        line = (Element) FlatNo.item(0);
+	        map.put("flatNo", getCharacterDataFromElement(line));
+	        NodeList Block = element.getElementsByTagName("Block");
+	        line = (Element) Block.item(0);
+	        map.put("block", getCharacterDataFromElement(line));
+	        
+	        NodeList SquareFt = element.getElementsByTagName("SquareFt");
+	        line = (Element) SquareFt.item(0);
+	        map.put("sqrFt", getCharacterDataFromElement(line));
+	        System.out.println("MAP===="+map);
+	        
+	        sqlClient.insert("amrapali.insertUsers", map);
+	        System.out.println("MAP===="+map);
+	      }
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+}
+
+public static String getCharacterDataFromElement(Element e) {
+    Node child = e.getFirstChild();
+    if (child instanceof CharacterData) {
+      CharacterData cd = (CharacterData) child;
+      return cd.getData();
+    }
+    return "";
+  }
+public List<AmrapaliCastleBean>getUserDetails(AmrapaliCastleBean amrapaliCastleBean){
+	SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+	List<AmrapaliCastleBean>list=null;
+	Map<String,Object>map=new HashMap<String,Object>();
+	try{
+		map.put("block", amrapaliCastleBean.getBlock());
+list=sqlClient.queryForList("amrapali.userDetails",map);
+System.out.println("LIST SIZE DAO===="+list.size());
+	}catch(Exception ex){
+		ex.printStackTrace();
+	}
+	return list;
+}
+
+}

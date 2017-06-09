@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.w3c.dom.Document"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Element"/>
+<fullyQualifiedTypeName name="org.w3c.dom.CharacterData"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Node"/>
+<fullyQualifiedTypeName name="com.ibatis.sqlmap.client.SqlMapClient"/>
+<fullyQualifiedTypeName name="com.amrapalicastle.ibatis.IBatisClientFactory"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.amrapalicastle.dao.AmrapaliCastleDao"/>
+<fullyQualifiedTypeName name="com.amrapalicastle.bean.AmrapaliCastleBean"/>
+</qualifiedTypeNameHistroy>
