@@ -23,7 +23,7 @@ public ModelAndView amrapaliCastleUsersCreation(HttpServletRequest request,HttpS
 	System.out.println("In Controller");
 	ModelAndView mav=new ModelAndView("amrapali_users_creation");
 	AmrapaliCastleBean amrapaliBean=new AmrapaliCastleBean();
-	
+	System.out.println("TEST");
 	mav.addObject("amrapaliBean",amrapaliBean);
 	return mav;
 }
