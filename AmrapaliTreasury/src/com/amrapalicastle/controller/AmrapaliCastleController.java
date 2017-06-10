@@ -2,7 +2,10 @@ package com.amrapalicastle.controller;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,11 +70,18 @@ public ModelAndView amrapaliCastleUsersPaymentInsertGet(HttpServletRequest reque
 	list.add(ampBean);
 	}
 	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	int currentYear=Integer.parseInt(amrapaliDao.getCurrentYear());
+	System.out.println("CurrentYear===="+currentYear);
+	Map<String,Object>yearMap=new TreeMap<String,Object>();
+	for(int i=currentYear-1;i<=currentYear+1;i++){
+		yearMap.put(i+"", i);
+	}
+	amrapaliBean.setYear(currentYear+"");
 	String currentMonthNo=amrapaliDao.getCurrentMonth();
 	amrapaliBean.setCurrentMonthNo(currentMonthNo);
 	mav.addObject("amrapaliBean",amrapaliBean);
 	mav.addObject("amrapaliuserPaymentBeanList",list);
-
+	mav.addObject("yearMap",yearMap);
 	/*AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
 	amrapaliDao.parXmlData(amrapaliBean);*/
 	return mav;
@@ -87,8 +97,18 @@ public ModelAndView amrapaliCastleUsersPaymentInsertOnlyPost(@ModelAttribute("am
 	AmrapaliCastleBean ampBean=new AmrapaliCastleBean();
 	list.add(ampBean);
 	}*/
+	
 	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	int currentYear=Integer.parseInt(amrapaliBean.getYear());
+	System.out.println("CurrentYear===="+currentYear);
+	amrapaliBean.setYear(currentYear+"");
 	List<AmrapaliCastleBean>list=amrapaliDao.getUserDetails(amrapaliBean);
+	
+	Map<String,Object>yearMap=new TreeMap<String,Object>();
+	for(int i=currentYear-1;i<=currentYear+1;i++){
+		yearMap.put(i+"", i);
+	}
+	
 	String currentMonthNo=amrapaliDao.getCurrentMonth();
 	int monthNo=Integer.parseInt(currentMonthNo);
 	amrapaliBean.setCurrentMonthNo(currentMonthNo);
@@ -122,7 +142,7 @@ public ModelAndView amrapaliCastleUsersPaymentInsertOnlyPost(@ModelAttribute("am
 	amrapaliBean.setBlock(amrapaliBean.getBlock());
 	mav.addObject("amrapaliBean",amrapaliBean);
 	mav.addObject("amrapaliuserPaymentBeanList",list);
-
+	mav.addObject("yearMap",yearMap);
 	/*AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
 	amrapaliDao.parXmlData(amrapaliBean);*/
 	return mav;

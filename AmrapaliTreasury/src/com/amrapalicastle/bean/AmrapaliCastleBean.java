@@ -24,6 +24,13 @@ private String sep;
 private String oct;
 private String nov;
 private String dec;
+private String year;
+public String getYear() {
+	return year;
+}
+public void setYear(String year) {
+	this.year = year;
+}
 private String month0;
 private String month1;
 private String month2;

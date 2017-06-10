@@ -108,7 +108,9 @@ monthCount++;
 var dueAmount=parseInt(size)*parseInt(monthCount);
 $('#amountToBePaid'+idx).val(dueAmount);
 }
-
+ function displayYear(){
+ 
+ }
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
@@ -116,8 +118,12 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <body style="background-color:#EFFAF5; ">
 <form:form action="/AmrapaliUsersPaymentInsert.html" method="POST" commandName="amrapaliBean">
 <div style="margin:auto" >
-<table style="width: 80%; margin: left" id="">
-<tr style="margin:left"><td style="text-align:right">
+<table style="width: 80%; margin: auto" id="">
+<tr style="margin:auto"><td style="text-align:right"><form:select id="year" path="year" onchange="displayYear()">
+<form:option value="Select" >Select</form:option>
+<form:options items="${yearMap}" />
+</form:select></td>
+<td style="text-align:right">
 <form:radiobutton path="block" id="blockA"  onclick="getUserDetails(this)" value="A"/>A
 <form:radiobutton path="block" id="blockB"  onclick="getUserDetails(this)" value="B"/>B
 <form:radiobutton path="block" id="blockC" value="C" onclick="getUserDetails(this)"/>C
@@ -130,6 +136,7 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <input type="text" name="feePerSqrFeet" id="feePerSqrFeet" value="${amrapaliBean.feePerSqrFeet}" size="1"><input type="hidden" name="rowNumber" id="rowNumber"/>
 
 Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: right"  size="2" /></td>
+
 <td>From<form:select path="fromMonth" id="fromMonth">
 <form:option value="0">JAN</form:option>
 <form:option value="1">FEB</form:option>

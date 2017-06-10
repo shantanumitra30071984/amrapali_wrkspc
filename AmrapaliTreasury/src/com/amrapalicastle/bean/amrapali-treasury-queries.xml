@@ -23,7 +23,8 @@ INSERT INTO AMPR_USER_MAINTENANCE_PAYMENT1(BLOCK, FLAT_NO,NAME,FLAT_SIZE,FIN_YEA
 (#block#,#flatNo#,#userName#,#sqrFt#,#year#,#jan#,#feb#,#mar#,#apr#,#may#,#jun#,#jul#,#aug#,#sep#,#oct#,#nov#,#dec#)
 </insert>
 <select id="userPaymentDetails" resultClass="com.amrapalicastle.bean.AmrapaliCastleBean">
-select u.flat_no flatNo,u.name userName,u.flat_size sqrFt, fin_year year,JAN month0, FEB month1,MAR month2,APR month3,MAY month4,JUN month5,JUL month6, AUG month7,SEP month8,OCT month9,NOV month10,DEC month11,due_amount amountToBePaid from AMPR_USER_MAINTENANCE_PAYMENT1 u where u.BLOCK=#block# order by u.flat_no
+select u.flat_no flatNo,u.name userName,u.flat_size sqrFt, fin_year year,JAN month0, FEB month1,MAR month2,APR month3,MAY month4,JUN month5,JUL month6, AUG month7,SEP month8,OCT month9,NOV month10,DEC month11,due_amount amountToBePaid from AMPR_USER_MAINTENANCE_PAYMENT1 u where u.BLOCK=#block# 
+and u.fin_year=#year# order by u.flat_no
 
 </select>
 <update id="updateUserPaymentDetails" parameterClass="java.util.Map">
@@ -34,5 +35,9 @@ where t.block=#block# and t.flat_no=#flatNo# and t.name=#userName#
 
 </update>
 
+
+<select id="currentYear" resultClass="java.lang.String">
+select to_char(sysdate, 'YYYY') from dual
+</select>
 </sqlMap>
 

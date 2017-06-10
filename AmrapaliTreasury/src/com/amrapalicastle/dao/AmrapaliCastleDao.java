@@ -78,6 +78,8 @@ public List<AmrapaliCastleBean>getUserDetails(AmrapaliCastleBean amrapaliCastleB
 	Map<String,Object>map=new HashMap<String,Object>();
 	try{
 		map.put("block", amrapaliCastleBean.getBlock());
+		map.put("year", amrapaliCastleBean.getYear());
+		System.out.println("MAP===="+map);
 list=sqlClient.queryForList("amrapali.userPaymentDetails",map);
 System.out.println("LIST SIZE DAO===="+list.size());
 	}catch(Exception ex){
@@ -201,5 +203,16 @@ public String getCurrentMonth(){
 		// TODO: handle exception
 	}
 	return monthNo;
+}
+public String getCurrentYear(){
+	String currentYear="";
+	SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+	try{
+		currentYear=(String)sqlClient.queryForObject("amrapali.currentYear");
+		System.out.println("currentYear===="+currentYear);
+	}catch(Exception ex){
+		
+	}
+	return currentYear;
 }
 }
