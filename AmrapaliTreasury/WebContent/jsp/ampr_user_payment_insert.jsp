@@ -84,11 +84,12 @@ var fromMonth=$('#fromMonth').val();
 var toMonth=$('#toMonth').val();
 var rowNumber=$('#rowNumber').val();
 var copyAmount=$('#copyAmount').val();
-alert(rowNumber);
+
 for(var i=fromMonth;i<=toMonth;i++){
 $('#'+month[i]+rowNumber).val(copyAmount);
 
 }
+calculateDueAmount(rowNumber);
 }
 function calculateDueAmount(idx){
 var currentMonth=$('#currentMonthNo').val();
@@ -115,8 +116,8 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <body style="background-color:#EFFAF5; ">
 <form:form action="/AmrapaliUsersPaymentInsert.html" method="POST" commandName="amrapaliBean">
 <div style="margin:auto" >
-<table style="width: 80%; margin: auto" id="">
-<tr style="text-align:right"><td style="text-align:right">
+<table style="width: 80%; margin: left" id="">
+<tr style="margin:left"><td style="text-align:right">
 <form:radiobutton path="block" id="blockA"  onclick="getUserDetails(this)" value="A"/>A
 <form:radiobutton path="block" id="blockB"  onclick="getUserDetails(this)" value="B"/>B
 <form:radiobutton path="block" id="blockC" value="C" onclick="getUserDetails(this)"/>C
@@ -124,11 +125,11 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <input type="hidden" name="currentMonthNo" id="currentMonthNo" value="${amrapaliBean.currentMonthNo}"/>
 </td>
 
-<td>Maintenance per square feet</td>
+<td>Maintenance per square feet
 
-<td><input type="text" name="feePerSqrFeet" id="feePerSqrFeet" value="${amrapaliBean.feePerSqrFeet}"><input type="hidden" name="rowNumber" id="rowNumber"/></td>
+<input type="text" name="feePerSqrFeet" id="feePerSqrFeet" value="${amrapaliBean.feePerSqrFeet}" size="1"><input type="hidden" name="rowNumber" id="rowNumber"/>
 
-<td>Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: right"/></td>
+Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: right"  size="2" /></td>
 <td>From<form:select path="fromMonth" id="fromMonth">
 <form:option value="0">JAN</form:option>
 <form:option value="1">FEB</form:option>
@@ -207,7 +208,7 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <td><input type="text" name="[amrapaliuserPaymentBeanList].month9" id="month9${status.index}" value="${listValue.month9 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
 <td><input type="text" name="[amrapaliuserPaymentBeanList].month10" id="month10${status.index}" value="${listValue.month10 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
 <td><input type="text" name="[amrapaliuserPaymentBeanList].month11" id="month11${status.index}" value="${listValue.month11 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].amountToBePaid" id="amountToBePaid${status.index}" value="${listValue.amountToBePaid }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="5"  onclick="calculateDueAmount(${status.index})"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].amountToBePaid" id="amountToBePaid${status.index}" value="${listValue.amountToBePaid }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="5"  onclick="calculateDueAmount(${status.index})" readonly="readonly"/></td>
 
 </tr>
 </c:forEach>
