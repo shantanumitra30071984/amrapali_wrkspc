@@ -225,5 +225,15 @@ public ModelAndView amrapaliCastleUsersPaymentInsertSave(@ModelAttribute("amrapa
 	amrapaliDao.parXmlData(amrapaliBean);*/
 	return mav;
 }
-
+@RequestMapping(value="AmrapaliUsersPaymentInsert.html",method=RequestMethod.POST,params="totalDuesButton")
+public ModelAndView amrapaliCastleTotalDues(@ModelAttribute("amrapaliBean")AmrapaliCastleBean amrapaliBean,HttpServletRequest request,HttpServletResponse response){
+	System.out.println("In totalDuesFunction");
+	ModelAndView mav=new ModelAndView();
+	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	List<AmrapaliCastleBean>list=amrapaliDao.totalDuesBlockWise(amrapaliBean);
+	for(AmrapaliCastleBean aBean:list){
+		System.out.println("Year="+aBean.getYear()+" Block="+aBean.getBlock()+" TotalDue="+aBean.getSumYearBlockWise());
+	}
+	return null;
+}
 }

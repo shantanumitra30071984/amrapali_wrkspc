@@ -28,6 +28,13 @@ private String year;
 private String flag;
 private String currentYear;
 private String dueAccordingToExcel;
+private String sumYearBlockWise;
+public String getSumYearBlockWise() {
+	return sumYearBlockWise;
+}
+public void setSumYearBlockWise(String sumYearBlockWise) {
+	this.sumYearBlockWise = sumYearBlockWise;
+}
 public String getDueAccordingToExcel() {
 	return dueAccordingToExcel;
 }

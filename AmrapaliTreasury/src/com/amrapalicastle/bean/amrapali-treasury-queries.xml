@@ -39,5 +39,32 @@ where t.block=#block# and t.flat_no=#flatNo# and t.name=#userName# and t.fin_yea
 <select id="currentYear" resultClass="java.lang.String">
 select to_char(sysdate, 'YYYY') from dual
 </select>
+<insert id="insertDueThisYear" parameterClass="java.util.Map">
+insert into ampr_user_total_dues(user_id,year,total_due,block)values(#userId#,#year#,#dueAmount#,#block#)
+</insert>
+
+<update id="updateDueThisYear" parameterClass="java.util.Map">
+update ampr_user_total_dues t set t.total_due=#dueAmount#
+where t.user_id=#userId#
+and t.year=#year#
+and t.block=#block#
+</update>
+
+<select id="duesThisYear" resultClass="java.lang.String">
+select t.total_due from ampr_user_total_dues t
+where t.user_id=#userId#
+and t.year=#year#
+and t.block=#block#
+</select>
+
+
+<select id="distinctYears" resultClass="java.lang.String">
+select distinct(d.year)from ampr_user_total_dues d
+</select>
+
+<select id="totalAmountBlockAndYearWise" resultClass="com.amrapalicastle.bean.AmrapaliCastleBean">
+select sum(t.total_due) sumYearBlockWise from ampr_user_total_dues t where t.block=#block# and t.year=#year#
+
+</select>
 </sqlMap>
 

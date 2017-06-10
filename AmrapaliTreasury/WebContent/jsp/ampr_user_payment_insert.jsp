@@ -136,7 +136,7 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <title>Insert title here</title>
 </head>
 <body style="background-color:#EFFAF5; ">
-<form:form action="/AmrapaliUsersPaymentInsert.html" method="POST" commandName="amrapaliBean">
+<form:form action="AmrapaliUsersPaymentInsert.html" method="POST" commandName="amrapaliBean">
 <div style="margin:auto" >
 <table style="width: 80%; margin: auto" id="">
 <tr style="margin:auto"><td style="text-align:right"><form:select id="year" path="year" onchange="displayYear()">
@@ -247,7 +247,9 @@ Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: ri
 <table style="width: 50%;margin:auto">
 <tr style="margin:auto">
 <td style="text-align:center">
-<input type="submit" id="save" name="save" value="Save" onclick="saveUsersPayment()"/><input type="hidden" name="xmlData" id="xmlData"/><input type="hidden" name="flag" id="flag" value="${amrapaliBean.flag}"/>
+<input type="submit" id="save" name="save" value="Save" onclick="saveUsersPayment()"/>
+<input type="submit" name="totalDuesButton" id="totalDuesButton" value="TotalDue" onclick="showTotalDues()"/>
+<input type="hidden" name="xmlData" id="xmlData"/><input type="hidden" name="flag" id="flag" value="${amrapaliBean.flag}"/>
 </td>
 </tr>
 </table>
