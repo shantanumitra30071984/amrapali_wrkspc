@@ -68,6 +68,9 @@ public static String getCharacterDataFromElement(Element e) {
     Node child = e.getFirstChild();
     if (child instanceof CharacterData) {
       CharacterData cd = (CharacterData) child;
+      if(cd.getData().equals("No dues")){
+    	  cd.setData("0");
+      }
       return cd.getData();
     }
     return "";
@@ -176,10 +179,20 @@ public void savePayment(AmrapaliCastleBean aBean){
 	        NodeList dueAmount = element.getElementsByTagName("DueAmount");
 	        line = (Element) dueAmount.item(0);
 	        map.put("dueAmount", getCharacterDataFromElement(line));
-	        map.put("userId", i+"");
-	        System.out.println("MAP===="+map);
 	        
-	        sqlClient.update("amrapali.updateUserPaymentDetails", map);
+	        
+	        NodeList dueAmountExcel = element.getElementsByTagName("DueAmountExcel");
+	        line = (Element) dueAmountExcel.item(0);
+	        map.put("dueAmountExcel", getCharacterDataFromElement(line));
+	        map.put("userId", (i+1)+"");
+	        System.out.println("MAP===="+map);
+	        if(aBean.getFlag().equals("UPDATE"))
+	        {
+	        	sqlClient.update("amrapali.updateUserPaymentDetails", map);
+	        	
+	        }else if(aBean.getFlag().equals("INSERT")){
+	        	sqlClient.update("amrapali.insertUsersPayment", map);
+	        }
 	        //System.out.println("MAP===="+map);
 	      }
 	}catch(Exception ex){
@@ -214,5 +227,9 @@ public String getCurrentYear(){
 		
 	}
 	return currentYear;
+}
+public int getPreviousYearDuesTotal(String userId,String currentYear){
+	
+	return 0;
 }
 }

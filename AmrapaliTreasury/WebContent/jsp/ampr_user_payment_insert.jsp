@@ -13,7 +13,7 @@ $( document ).ready(function() {
   
   $('#rowNumber').val(($(this).index()-1));
   var row=$('#rowNumber').val();
-  $('#copyAmount').val($('#sqrFt'+row).val());
+  $('#copyAmount').val($('#sqrFt'+row).val()*$('#feePerSqrFeet').val());
   
 });
 });
@@ -41,28 +41,30 @@ var block='';
  var xml = '<?xml version="1.0"?><Root>\n';
                 var row=0;
                 $("#insertTable tr").each(function () {
-                   
+                  
                         if(($('#userName'+row).val()!=null && $('#userName'+row).val()!='')|| ($('#flatNo'+row).val()!=null && $('#flatNo'+row).val()!='') || ($('#block'+row).val()!=null && $('#block'+row).val()!='') || ($('#sqrFt'+row).val()!=null && $('#sqrFt'+row).val()!=''))
                           {
+                         
                           xml +="<User>";
                             xml += "\t<UserName>" + $('#userName'+row).val() + "</UserName>\n";
                             xml += "\t<FlatNo>" + $('#flatNo'+row).val() + "</FlatNo>\n";
                             xml += "\t<Block>" + block + "</Block>\n";
                             xml += "\t<SquareFt>" + $('#sqrFt'+row).val() + "</SquareFt>\n";
                              xml += "\t<Year>" + $('#financialYear'+row).val() + "</Year>\n";
-                               xml += "\t<Jan>" + $('#month0'+row).val() + "</Jan>\n";
-                            xml += "\t<Feb>" + $('#month1'+row).val() + "</Feb>\n";
-                             xml += "\t<Mar>" + $('#month2'+row).val() + "</Mar>\n";
-                               xml += "\t<Apr>" + $('#month3'+row).val() + "</Apr>\n";
-                                 xml += "\t<May>" + $('#month4'+row).val() + "</May>\n";
-                                   xml += "\t<Jun>" + $('#month5'+row).val() + "</Jun>\n";
-                                     xml += "\t<Jul>" + $('#month6'+row).val() + "</Jul>\n";
-                                       xml += "\t<Aug>" + $('#month7'+row).val() + "</Aug>\n";
-                                         xml += "\t<Sep>" + $('#month8'+row).val() + "</Sep>\n";
-                                           xml += "\t<Oct>" + $('#month9'+row).val() + "</Oct>\n";
-                                             xml += "\t<Nov>" + $('#month10'+row).val() + "</Nov>\n";
-                                               xml += "\t<Dec>" + $('#month11'+row).val() + "</Dec>\n";
+                               xml += "\t<Jan>" + $('#month0-'+row).val() + "</Jan>\n";
+                            xml += "\t<Feb>" + $('#month1-'+row).val() + "</Feb>\n";
+                             xml += "\t<Mar>" + $('#month2-'+row).val() + "</Mar>\n";
+                               xml += "\t<Apr>" + $('#month3-'+row).val() + "</Apr>\n";
+                                 xml += "\t<May>" + $('#month4-'+row).val() + "</May>\n";
+                                   xml += "\t<Jun>" + $('#month5-'+row).val() + "</Jun>\n";
+                                     xml += "\t<Jul>" + $('#month6-'+row).val() + "</Jul>\n";
+                                       xml += "\t<Aug>" + $('#month7-'+row).val() + "</Aug>\n";
+                                         xml += "\t<Sep>" + $('#month8-'+row).val() + "</Sep>\n";
+                                           xml += "\t<Oct>" + $('#month9-'+row).val() + "</Oct>\n";
+                                             xml += "\t<Nov>" + $('#month10-'+row).val() + "</Nov>\n";
+                                               xml += "\t<Dec>" + $('#month11-'+row).val() + "</Dec>\n";
                                                xml += "\t<DueAmount>" + $('#amountToBePaid'+row).val() + "</DueAmount>\n";
+                                       xml += "\t<DueAmountExcel>" + $('#dueAccordingToExcel'+row).val() + "</DueAmountExcel>\n";        
                                                
                        xml +="</User>";
                    
@@ -72,7 +74,7 @@ var block='';
                 xml += '</Root>';
               
                 $('#xmlData').val(xml);
-                
+               
                document.forms[0].action='AmrapaliUsersPaymentInsert.html';
                 document.forms[0].submit();
 }
@@ -86,7 +88,7 @@ var rowNumber=$('#rowNumber').val();
 var copyAmount=$('#copyAmount').val();
 
 for(var i=fromMonth;i<=toMonth;i++){
-$('#'+month[i]+rowNumber).val(copyAmount);
+$('#'+month[i]+'-'+rowNumber).val(copyAmount);
 
 }
 calculateDueAmount(rowNumber);
@@ -94,11 +96,26 @@ calculateDueAmount(rowNumber);
 function calculateDueAmount(idx){
 var currentMonth=$('#currentMonthNo').val();
 var monthCount=0;
-var colno='';
-
+var fromMonthDue='0';
+var toMonthDue=currentMonth;
 var size=$('#sqrFt'+idx).val();
-for(var i=0;i<currentMonth;i++){
-colno=i+''+idx;
+var colno='';
+if($('#year').val()>$('#currentYear').val() ){
+currentMonth=12;
+}else if($('#year').val()<$('#currentYear').val()){
+currentMonth=$('#toMonth').val();
+
+currentMonth=parseInt(currentMonth)+1;
+
+fromMonthDue=parseInt(currentMonth);
+
+toMonthDue=12;
+}
+
+
+
+for(var i=fromMonthDue;i<toMonthDue;i++){
+colno=i+'-'+idx;
 
 if($('#month'+colno).val()=='0'){
 monthCount++;
@@ -106,8 +123,11 @@ monthCount++;
 
 }
 var dueAmount=parseInt(size)*parseInt(monthCount);
+if($('#year').val()<=$('#currentYear').val() ){
 $('#amountToBePaid'+idx).val(dueAmount);
-}
+}else if($('#year').val()>$('#currentYear').val()&& $('#amountToBePaid'+idx).val()!='No dues'){
+$('#amountToBePaid'+idx).val(dueAmount);
+}}
  function displayYear(){
  
  }
@@ -122,7 +142,7 @@ $('#amountToBePaid'+idx).val(dueAmount);
 <tr style="margin:auto"><td style="text-align:right"><form:select id="year" path="year" onchange="displayYear()">
 <form:option value="Select" >Select</form:option>
 <form:options items="${yearMap}" />
-</form:select></td>
+</form:select><form:hidden path="currentYear" id="currentYear"/></td>
 <td style="text-align:right">
 <form:radiobutton path="block" id="blockA"  onclick="getUserDetails(this)" value="A"/>A
 <form:radiobutton path="block" id="blockB"  onclick="getUserDetails(this)" value="B"/>B
@@ -192,6 +212,7 @@ Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: ri
 <th style="border-style: solid">NOV</th>
 <th style="border-style: solid">DEC</th>
 <th style="border-style: solid">Payment Due</th>
+<th style="border-style: solid">Payment Due According To Excel</th>
 </tr>
 <c:forEach var="listValue" items="${amrapaliuserPaymentBeanList}" varStatus="status">
 				
@@ -203,20 +224,20 @@ Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: ri
 <td><font size="2"><input type="text" name="[amrapaliuserPaymentBeanList].userName" id="userName${status.index}" value="${listValue.userName }" style="text-align: center;border:none;background-color:${listValue.rowColor}" size="35"/></font></td>
 <td><input type="text" name="[amrapaliuserPaymentBeanList].sqrFt" id="sqrFt${status.index}" value="${listValue.sqrFt }" style="text-align: center;border:none;background-color:${listValue.rowColor}" size="4"/></td>
 <td><input type="text" name="[amrapaliuserPaymentBeanList].financialYear" id="financialYear${status.index}" value="${listValue.financialYear }" style="text-align: center;border:none;background-color:${listValue.rowColor}" size="4"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month0" id="month0${status.index}" value="${listValue.month0 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month1" id="month1${status.index}" value="${listValue.month1 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month2" id="month2${status.index}" value="${listValue.month2 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month3" id="month3${status.index}" value="${listValue.month3 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month4" id="month4${status.index}" value="${listValue.month4 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month5" id="month5${status.index}" value="${listValue.month5 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month6" id="month6${status.index}" value="${listValue.month6 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month7" id="month7${status.index}" value="${listValue.month7 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month8" id="month8${status.index}" value="${listValue.month8 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month9" id="month9${status.index}" value="${listValue.month9 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month10" id="month10${status.index}" value="${listValue.month10 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
-<td><input type="text" name="[amrapaliuserPaymentBeanList].month11" id="month11${status.index}" value="${listValue.month11 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month0" id="month0-${status.index}" value="${listValue.month0 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month1" id="month1-${status.index}" value="${listValue.month1 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month2" id="month2-${status.index}" value="${listValue.month2 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month3" id="month3-${status.index}" value="${listValue.month3 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month4" id="month4-${status.index}" value="${listValue.month4 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month5" id="month5-${status.index}" value="${listValue.month5 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month6" id="month6-${status.index}" value="${listValue.month6 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month7" id="month7-${status.index}" value="${listValue.month7 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month8" id="month8-${status.index}" value="${listValue.month8 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month9" id="month9-${status.index}" value="${listValue.month9 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month10" id="month10-${status.index}" value="${listValue.month10 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
+<td><input type="text" name="[amrapaliuserPaymentBeanList].month11" id="month11-${status.index}" value="${listValue.month11 }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="3"/></td>
 <td><input type="text" name="[amrapaliuserPaymentBeanList].amountToBePaid" id="amountToBePaid${status.index}" value="${listValue.amountToBePaid }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="5"  onclick="calculateDueAmount(${status.index})" readonly="readonly"/></td>
-
+<td><input type="text" name="[amrapaliuserPaymentBeanList].dueAccordingToExcel" id="dueAccordingToExcel${status.index}" value="${listValue.dueAccordingToExcel }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="5"   readonly="readonly"/></td>
 </tr>
 </c:forEach>
 
@@ -226,7 +247,7 @@ Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: ri
 <table style="width: 50%;margin:auto">
 <tr style="margin:auto">
 <td style="text-align:center">
-<input type="submit" id="save" name="save" value="Save" onclick="saveUsersPayment()"><input type="hidden" name="xmlData" id="xmlData"/>
+<input type="submit" id="save" name="save" value="Save" onclick="saveUsersPayment()"/><input type="hidden" name="xmlData" id="xmlData"/><input type="hidden" name="flag" id="flag" value="${amrapaliBean.flag}"/>
 </td>
 </tr>
 </table>

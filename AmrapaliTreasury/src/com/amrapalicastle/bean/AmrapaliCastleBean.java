@@ -25,6 +25,27 @@ private String oct;
 private String nov;
 private String dec;
 private String year;
+private String flag;
+private String currentYear;
+private String dueAccordingToExcel;
+public String getDueAccordingToExcel() {
+	return dueAccordingToExcel;
+}
+public void setDueAccordingToExcel(String dueAccoringToExcel) {
+	this.dueAccordingToExcel = dueAccoringToExcel;
+}
+public String getCurrentYear() {
+	return currentYear;
+}
+public void setCurrentYear(String currentYear) {
+	this.currentYear = currentYear;
+}
+public String getFlag() {
+	return flag;
+}
+public void setFlag(String flag) {
+	this.flag = flag;
+}
 public String getYear() {
 	return year;
 }

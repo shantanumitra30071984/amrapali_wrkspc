@@ -30,8 +30,8 @@ and u.fin_year=#year# order by u.flat_no
 <update id="updateUserPaymentDetails" parameterClass="java.util.Map">
 update AMPR_USER_MAINTENANCE_PAYMENT1 t set t.JAN=#jan#,  t.FEB=#feb#, t.MAR=#mar#, t.APR=#apr#, t.MAY=#may#,
  t.JUN=#jun#, t.JUL=#jul#,  t.AUG=#aug#,  t.SEP=#sep#, t.OCT=#oct#,  t.NOV=#nov#, t.DEC=#dec#,
- t.DUE_AMOUNT=#dueAmount#
-where t.block=#block# and t.flat_no=#flatNo# and t.name=#userName#
+ t.DUE_AMOUNT=#dueAmount#,t.due_according_to_excel=#dueAmountExcel#,t.user_id=#userId#
+where t.block=#block# and t.flat_no=#flatNo# and t.name=#userName# and t.fin_year=#year#
 
 </update>
 

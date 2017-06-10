@@ -79,6 +79,7 @@ public ModelAndView amrapaliCastleUsersPaymentInsertGet(HttpServletRequest reque
 	amrapaliBean.setYear(currentYear+"");
 	String currentMonthNo=amrapaliDao.getCurrentMonth();
 	amrapaliBean.setCurrentMonthNo(currentMonthNo);
+	amrapaliBean.setCurrentYear(currentYear+"");
 	mav.addObject("amrapaliBean",amrapaliBean);
 	mav.addObject("amrapaliuserPaymentBeanList",list);
 	mav.addObject("yearMap",yearMap);
@@ -99,11 +100,41 @@ public ModelAndView amrapaliCastleUsersPaymentInsertOnlyPost(@ModelAttribute("am
 	}*/
 	
 	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
-	int currentYear=Integer.parseInt(amrapaliBean.getYear());
+	int currentYear=Integer.parseInt(amrapaliDao.getCurrentYear());
 	System.out.println("CurrentYear===="+currentYear);
-	amrapaliBean.setYear(currentYear+"");
+	
+	amrapaliBean.setYear(amrapaliBean.getYear());
 	List<AmrapaliCastleBean>list=amrapaliDao.getUserDetails(amrapaliBean);
 	
+	System.out.println("LIST SIZE==="+list.size());
+	if(list.size()==0){
+		String yearTemp=amrapaliBean.getYear();
+		amrapaliBean.setFlag("INSERT");
+		System.out.println("In if list size=="+list.size());
+		System.out.println("Current year==="+currentYear);
+		amrapaliBean.setYear(currentYear+"");
+		list=amrapaliDao.getUserDetails(amrapaliBean);
+		System.out.println("In if new list size=="+list.size());
+		amrapaliBean.setYear(yearTemp);
+		for(AmrapaliCastleBean aBean:list){
+			aBean.setMonth0("0");
+			aBean.setMonth1("0");
+			aBean.setMonth2("0");
+			aBean.setMonth3("0");
+			aBean.setMonth4("0");
+			aBean.setMonth5("0");
+			aBean.setMonth6("0");
+			aBean.setMonth7("0");
+			aBean.setMonth8("0");
+			aBean.setMonth9("0");
+			aBean.setMonth10("0");
+			aBean.setMonth11("0");
+			int dueAmount=Integer.parseInt(aBean.getSqrFt())*12;
+			aBean.setAmountToBePaid(dueAmount+"");
+		}
+	}else{
+		amrapaliBean.setFlag("UPDATE");
+	}
 	Map<String,Object>yearMap=new TreeMap<String,Object>();
 	for(int i=currentYear-1;i<=currentYear+1;i++){
 		yearMap.put(i+"", i);
@@ -114,15 +145,22 @@ public ModelAndView amrapaliCastleUsersPaymentInsertOnlyPost(@ModelAttribute("am
 	amrapaliBean.setCurrentMonthNo(currentMonthNo);
 	System.out.println("LIST SIZE CONTROLLER===="+list.size());
 	System.out.println("Block====="+amrapaliBean.getBlock());
-	
+	System.out.println("FLAG==="+amrapaliBean.getFlag());
 	for(AmrapaliCastleBean aBean:list){
 		System.out.println("SQRFT==="+aBean.getSqrFt());
 		System.out.println("USERNAME=="+aBean.getUserName());
 		System.out.println("MONTH0==="+aBean.getMonth0());
-		aBean.setFinancialYear("2017");
-		if(Integer.parseInt(aBean.getAmountToBePaid())>0){
+		aBean.setFinancialYear(amrapaliBean.getYear());
+		if( (aBean.getAmountToBePaid()==null || (!aBean.getAmountToBePaid().equals("No dues")&&Integer.parseInt(aBean.getAmountToBePaid())>0)) && Integer.parseInt(amrapaliBean.getYear())<=currentYear 
+		 ){
+			aBean.setRowColor("#FDB3FD");
+		}else if(Integer.parseInt(amrapaliBean.getYear())!=currentYear && aBean.getMonth0().equals("0")&& aBean.getMonth1().equals("0")&& aBean.getMonth2().equals("0")&& aBean.getMonth3().equals("0")
+				
+				&& aBean.getMonth4().equals("0")&& aBean.getMonth5().equals("0")&& aBean.getMonth6().equals("0")&& aBean.getMonth7().equals("0")&& aBean.getMonth8().equals("0")
+				&& aBean.getMonth9().equals("0")&& aBean.getMonth10().equals("0")&& aBean.getMonth11().equals("0")){
 			aBean.setRowColor("#FDB3FD");
 		}else{
+			aBean.setAmountToBePaid("No dues");
 			aBean.setRowColor("#80FF00");
 		}
 		/*aBean.setJan("0");
@@ -158,8 +196,19 @@ public ModelAndView amrapaliCastleUsersPaymentInsertSave(@ModelAttribute("amrapa
 	for(int i=0;i<15;i++){
 	AmrapaliCastleBean ampBean=new AmrapaliCastleBean();
 	list.add(ampBean);
+	
 	}*/
 	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	int currentYear=Integer.parseInt(amrapaliDao.getCurrentYear());
+	System.out.println("CurrentYear===="+currentYear);
+	amrapaliBean.setYear(amrapaliBean.getYear());
+	
+	Map<String,Object>yearMap=new TreeMap<String,Object>();
+	for(int i=currentYear-1;i<=currentYear+1;i++){
+		yearMap.put(i+"", i);
+	}
+	
+	
 	amrapaliDao.savePayment(amrapaliBean);
 	/*System.out.println("LIST SIZE CONTROLLER===="+list.size());
 	System.out.println("Block====="+amrapaliBean.getBlock());
@@ -169,6 +218,7 @@ public ModelAndView amrapaliCastleUsersPaymentInsertSave(@ModelAttribute("amrapa
 		
 	}*/
 	mav.addObject("amrapaliBean",amrapaliBean);
+	mav.addObject("yearMap",yearMap);
 	//mav.addObject("amrapaliuserPaymentBeanList",list);
 
 	/*AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
