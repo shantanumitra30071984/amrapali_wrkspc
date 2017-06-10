@@ -1,6 +1,7 @@
 package com.amrapalicastle.dao;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +190,7 @@ public void savePayment(AmrapaliCastleBean aBean){
 	        if(aBean.getFlag().equals("UPDATE"))
 	        {
 	        	sqlClient.update("amrapali.updateUserPaymentDetails", map);
+	        	duesThisYear(map);
 	        	
 	        }else if(aBean.getFlag().equals("INSERT")){
 	        	sqlClient.update("amrapali.insertUsersPayment", map);
@@ -228,8 +230,52 @@ public String getCurrentYear(){
 	}
 	return currentYear;
 }
-public int getPreviousYearDuesTotal(String userId,String currentYear){
+public void duesThisYear(Map<String,Object>map){
+	SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+	System.out.println("In duesThisYear");
+	int total=0;
 	
-	return 0;
+	try{
+	
+		System.out.println("MAP==="+map);
+		String duesThisYear=(String)sqlClient.queryForObject("amrapali.duesThisYear",map);
+		System.out.println("duesThisYear==="+duesThisYear);
+		if(duesThisYear==null || duesThisYear.equals("")){
+			System.out.println("calling insertDueThisYear");
+			sqlClient.insert("amrapali.insertDueThisYear",map);
+		}else{
+			System.out.println("calling updateDueThisYear");
+			sqlClient.update("amrapali.updateDueThisYear",map);
+		}
+		
+	
+	}catch (Exception e) {
+		e.printStackTrace();
+		// TODO: handle exception
+	}
+	
+}
+	public List<AmrapaliCastleBean>totalDuesBlockWise(AmrapaliCastleBean amrapaliBean){
+		SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+		List<String>years=null;
+		Map<String,Object>map=new HashMap<String,Object>();
+		List<AmrapaliCastleBean>totalAmountYearAndBlockWise=new ArrayList<AmrapaliCastleBean>();
+		try{
+			
+			int currentYear=Integer.parseInt(getCurrentYear());
+			for(int i=currentYear;i>=2016;i--){
+				map.put("year", i+"");
+				map.put("block", amrapaliBean.getBlock());
+				System.out.println("MAP==="+map);
+				AmrapaliCastleBean aBean=(AmrapaliCastleBean)sqlClient.queryForObject("amrapali.totalAmountBlockAndYearWise",map);
+				aBean.setYear(i+"");
+				aBean.setBlock(amrapaliBean.getBlock());
+				totalAmountYearAndBlockWise.add(aBean);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return totalAmountYearAndBlockWise;
+	
 }
 }
