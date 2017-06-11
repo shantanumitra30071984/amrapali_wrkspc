@@ -185,18 +185,27 @@ public void savePayment(AmrapaliCastleBean aBean){
 	        NodeList dueAmountExcel = element.getElementsByTagName("DueAmountExcel");
 	        line = (Element) dueAmountExcel.item(0);
 	        map.put("dueAmountExcel", getCharacterDataFromElement(line));
+	        
+	        
+	        NodeList totalDueAmnt = element.getElementsByTagName("totalDueAmount");
+	        line = (Element) totalDueAmnt.item(0);
+	        map.put("totalDueAmnt", getCharacterDataFromElement(line));
+	        
 	        map.put("userId", (i+1)+"");
 	        System.out.println("MAP===="+map);
 	        if(aBean.getFlag().equals("UPDATE"))
 	        {
 	        	sqlClient.update("amrapali.updateUserPaymentDetails", map);
-	        	duesThisYear(map);
+	        	/* duesThisYear(map);*/
+	        	/*duesThisYear(map);*/
 	        	
 	        }else if(aBean.getFlag().equals("INSERT")){
 	        	sqlClient.update("amrapali.insertUsersPayment", map);
 	        }
+	       
 	        //System.out.println("MAP===="+map);
 	      }
+	    duesThisYear(map);
 	}catch(Exception ex){
 		ex.printStackTrace();
 	}
@@ -238,9 +247,10 @@ public void duesThisYear(Map<String,Object>map){
 	try{
 	
 		System.out.println("MAP==="+map);
-		String duesThisYear=(String)sqlClient.queryForObject("amrapali.duesThisYear",map);
+		List<String> duesThisYear=sqlClient.queryForList("amrapali.duesThisYear",map);
 		System.out.println("duesThisYear==="+duesThisYear);
-		if(duesThisYear==null || duesThisYear.equals("")){
+		System.out.println("SIZE=="+duesThisYear.size());
+		if(duesThisYear.size()==0){
 			System.out.println("calling insertDueThisYear");
 			sqlClient.insert("amrapali.insertDueThisYear",map);
 		}else{

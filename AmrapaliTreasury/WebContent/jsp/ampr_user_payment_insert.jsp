@@ -64,7 +64,8 @@ var block='';
                                              xml += "\t<Nov>" + $('#month10-'+row).val() + "</Nov>\n";
                                                xml += "\t<Dec>" + $('#month11-'+row).val() + "</Dec>\n";
                                                xml += "\t<DueAmount>" + $('#amountToBePaid'+row).val() + "</DueAmount>\n";
-                                       xml += "\t<DueAmountExcel>" + $('#dueAccordingToExcel'+row).val() + "</DueAmountExcel>\n";        
+                                       xml += "\t<DueAmountExcel>" + $('#dueAccordingToExcel'+row).val() + "</DueAmountExcel>\n";
+                                        xml += "\t<totalDueAmount>" + $('#totalAmnt').val() + "</totalDueAmount>\n";        
                                                
                        xml +="</User>";
                    
@@ -128,8 +129,21 @@ $('#amountToBePaid'+idx).val(dueAmount);
 }else if($('#year').val()>$('#currentYear').val()&& $('#amountToBePaid'+idx).val()!='No dues'){
 $('#amountToBePaid'+idx).val(dueAmount);
 }}
- function displayYear(){
- 
+ function calculateTotalSumForBlock(){
+ var row=0;
+ var sum=0;
+                $("#insertTable tr").each(function () {
+                  
+                  if( $('#amountToBePaid'+row).val()!=null && $('#amountToBePaid'+row).val()!='No dues')
+                          {
+                          
+                          ;
+                          sum=sum+parseInt($('#amountToBePaid'+row).val());
+                          
+                          }
+                          row++;
+                          });
+  $('#totalAmnt').val(sum);
  }
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -240,15 +254,16 @@ Amount<input type="text" name="copyAmount" id="copyAmount" style="text-align: ri
 <td><input type="text" name="[amrapaliuserPaymentBeanList].dueAccordingToExcel" id="dueAccordingToExcel${status.index}" value="${listValue.dueAccordingToExcel }" style="text-align: right;border:none;background-color:${listValue.rowColor}" size="5"   readonly="readonly"/></td>
 </tr>
 </c:forEach>
-
+<tr style="margin:right"><td colspan="18" style="text-align:right"><input type="text" name="totalAmnt" id="totalAmnt" onclick="calculateTotalSumForBlock()" size=5 style="text-align:right"/></td></tr>
 </table>
+
 </div>
 <div style="margin: auto">
 <table style="width: 50%;margin:auto">
 <tr style="margin:auto">
 <td style="text-align:center">
 <input type="submit" id="save" name="save" value="Save" onclick="saveUsersPayment()"/>
-<input type="submit" name="totalDuesButton" id="totalDuesButton" value="TotalDue" onclick="showTotalDues()"/>
+<!--  <input type="submit" name="totalDuesButton" id="totalDuesButton" value="TotalDue" onclick="showTotalDues()"/>-->
 <input type="hidden" name="xmlData" id="xmlData"/><input type="hidden" name="flag" id="flag" value="${amrapaliBean.flag}"/>
 </td>
 </tr>
