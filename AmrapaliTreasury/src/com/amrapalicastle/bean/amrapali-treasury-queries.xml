@@ -54,7 +54,7 @@ and t.block=#block#
 select t.total_due from ampr_user_total_dues t
 where
 t.year=#year#
-and t.block=#block#
+and t.block like #block#
 </select>
 
 
@@ -66,5 +66,13 @@ select distinct(d.year)from ampr_user_total_dues d
 select sum(t.total_due) sumYearBlockWise from ampr_user_total_dues t where t.block=#block# and t.year=#year#
 
 </select>
+<select id="totalDuesYearWise" parameterClass="java.util.Map" resultClass="com.amrapalicastle.bean.AmrapaliCastleBean">
+select t.total_due amountToBePaid,t.block block,t.year year from ampr_user_total_dues t
+where
+t.year=#year#
+
+</select>
+
+
 </sqlMap>
 

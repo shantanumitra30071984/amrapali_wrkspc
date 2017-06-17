@@ -236,4 +236,49 @@ public ModelAndView amrapaliCastleTotalDues(@ModelAttribute("amrapaliBean")Amrap
 	}
 	return null;
 }
+
+
+@RequestMapping(value="/totalDuesBlockWise.html",method=RequestMethod.GET)
+public ModelAndView totalDuesBlockWise(HttpServletRequest request,HttpServletResponse response){
+	System.out.println("totalDuesBlockWise");
+	//System.out.println("XML DATA====="+amrapaliBean.getXmlData());
+	ModelAndView mav=new ModelAndView("total-dues-blockwise");
+	//AmrapaliCastleBean amrapaliBean=new AmrapaliCastleBean();
+	AmrapaliCastleBean amrapaliBean=new AmrapaliCastleBean();
+	
+	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	int currentYear=Integer.parseInt(amrapaliDao.getCurrentYear());
+	System.out.println("CurrentYear===="+currentYear);
+	Map<String,Object>yearMap=new TreeMap<String,Object>();
+	for(int i=currentYear-1;i<=currentYear+1;i++){
+		yearMap.put(i+"", i);
+	}
+	
+	amrapaliBean.setCurrentYear(currentYear+"");
+	mav.addObject("amrapaliBean",amrapaliBean);
+	
+	mav.addObject("yearMap",yearMap);
+	/*AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	amrapaliDao.parXmlData(amrapaliBean);*/
+	return mav;
+}
+
+@RequestMapping(value="totalDuesBlockWise.html",method=RequestMethod.POST,params="show")
+public ModelAndView totalDuesBlockWise(@ModelAttribute("amrapaliBean")AmrapaliCastleBean amrapaliBean,HttpServletRequest request,HttpServletResponse response){
+	System.out.println("In totalDuesFunction show");
+	ModelAndView mav=new ModelAndView("total-dues-blockwise");
+	AmrapaliCastleDao amrapaliDao=new AmrapaliCastleDao();
+	List<AmrapaliCastleBean>list=amrapaliDao.totalDuesYearWise(amrapaliBean);
+	System.out.println("list size=="+list.size());
+	int currentYear=Integer.parseInt(amrapaliDao.getCurrentYear());
+	System.out.println("CurrentYear===="+currentYear);
+	Map<String,Object>yearMap=new TreeMap<String,Object>();
+	for(int i=currentYear-1;i<=currentYear+1;i++){
+		yearMap.put(i+"", i);
+	}
+	mav.addObject("amrapaliBean",amrapaliBean);
+	mav.addObject("list",list);
+	mav.addObject("yearMap",yearMap);
+	return mav;
+}
 }

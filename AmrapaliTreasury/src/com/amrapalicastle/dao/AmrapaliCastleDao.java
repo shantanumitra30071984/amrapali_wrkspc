@@ -288,4 +288,19 @@ public void duesThisYear(Map<String,Object>map){
 		return totalAmountYearAndBlockWise;
 	
 }
+	
+	public List<AmrapaliCastleBean>totalDuesYearWise(AmrapaliCastleBean amrapaliBean){
+		
+		List<AmrapaliCastleBean>totalDueList=null;
+		SqlMapClient sqlClient=IBatisClientFactory.getIBatisClient();
+		Map<String,Object>map=new HashMap<String,Object>();
+		map.put("year", amrapaliBean.getYear());
+		try{
+			totalDueList=sqlClient.queryForList("amrapali.totalDuesYearWise",map);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return totalDueList;
+	}
 }
